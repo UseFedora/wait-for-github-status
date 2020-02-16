@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  wait_for_status:
+    runs-on: ubuntu-latest
+    name: wait for CircleCI
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Wait for circleci
+        uses: ./ # Uses an action in the root directory
+        id: wait_for_status
+        with:
+          context: 'circleci'
+      # Use the output from the `hello` step
+      - name: Output the finished status
+        run: echo "The time was ${{ steps.wait_for_status.outputs.status }}"
