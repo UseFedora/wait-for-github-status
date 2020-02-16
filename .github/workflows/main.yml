@@ -13,6 +13,8 @@ jobs:
         id: wait_for_status
         with:
           context: 'circleci'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       # Use the output from the `hello` step
       - name: Output the finished status
         run: echo "The time was ${{ steps.wait_for_status.outputs.status }}"

@@ -5,6 +5,9 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'circleci'
+  token:
+    description: "Github repo token"
+    required: true
 outputs:
   status: # id of output
     description: 'Status we waited for, either success or failure'
