@@ -1,5 +1,35 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const poll = require('./poll')
+
+// https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref
+const TERMINAL_STATES = ['failure', 'error', 'success']
+// Get state of the specific status we care about
+function isTerminalStatus(status) {
+  if(!status) {
+    console.log("no status for this context found")
+    return false
+  }
+  console.log(`${status.context} - ${status.description} - ${status.state}`)
+  if(TERMINAL_STATES.includes(status.state)) {
+    console.log("Complete!")
+    return true
+  }
+
+  else {
+    return false
+  }
+}
+
+async function getContextStatus({token, ref, owner, repo, context}) {
+  const octokit = new github.GitHub(token);
+  const {data} = await octokit.repos.getCombinedStatusForRef({
+    owner,
+    repo,
+    ref
+  })
+  return data.statuses.find((contextStatus) => contextStatus.context.includes(context))
+}
 
 async function run() {
   try {
@@ -12,20 +42,12 @@ async function run() {
     const repo = payload.repository.name
 
     console.log({ref, owner, repo, context})
-    console.log(`Waiting for ${context}!`);
+    console.log(`Waiting for ${context} status to suceed or fail!`);
 
-    const octokit = new github.GitHub(token);
-    const {data} = await octokit.repos.getCombinedStatusForRef({
-      owner,
-      repo,
-      ref
-    })
-    console.log(JSON.stringify(data, undefined, 2))
-
-    core.setOutput('status', 'success');
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payloadStr = JSON.stringify(github.context.payload, undefined, 2);
-    console.log(`The event payload: ${payloadStr}`);
+    const getStatusFn = () => getContextStatus({token, ref, owner, repo, context})
+    const terminalStatus = await poll(getStatusFn, isTerminalStatus, 5000)
+    console.log(JSON.stringify(terminalStatus, undefined, 2))
+    core.setOutput('status', terminalStatus.state);
   } catch (error) {
     core.setFailed(error.message);
   }
