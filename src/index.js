@@ -6,10 +6,10 @@ async function run() {
     // `who-to-greet` input defined in action metadata file
     const context = core.getInput('context');
     const token = core.getInput('token');
-
-    const ref = github.context.payload.after
-    const owner = github.context.repository.owner.login
-    const repo = github.context.repository.name
+    const {payload} = github
+    const ref = payload.after
+    const owner = payload.repository.owner.login
+    const repo = payload.repository.name
 
     console.log({ref, owner, repo, context})
     console.log(`Waiting for ${context}!`);
@@ -24,8 +24,8 @@ async function run() {
 
     core.setOutput('status', 'success');
     // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2);
-    console.log(`The event payload: ${payload}`);
+    const payloadStr = JSON.stringify(github.context.payload, undefined, 2);
+    console.log(`The event payload: ${payloadStr}`);
   } catch (error) {
     core.setFailed(error.message);
   }
