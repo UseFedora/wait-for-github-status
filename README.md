@@ -1,4 +1,4 @@
-# Wait for status action (WIP)
+# Wait for status action
 
 Waits for a successful commit status
 
