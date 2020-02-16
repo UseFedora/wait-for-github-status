@@ -8398,8 +8398,8 @@ const github = __webpack_require__(469);
 async function run() {
   try {
     // `who-to-greet` input defined in action metadata file
-    const context = core.getInput("context");
-    const token = new github.GitHub(myToken);
+    const context = core.getInput('context');
+    const token = core.getInput('token');
 
     const ref = github.context.payload.after
     const owner = github.context.repository.owner.login
@@ -8416,7 +8416,7 @@ async function run() {
     })
     console.log(JSON.stringify(data, undefined, 2))
 
-    core.setOutput("status", "success");
+    core.setOutput('status', 'success');
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2);
     console.log(`The event payload: ${payload}`);
