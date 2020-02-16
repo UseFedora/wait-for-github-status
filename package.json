@@ -1,6 +1,6 @@
 {
   "name": "wait-for-github-status",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -11,6 +11,7 @@
     "@actions/github": "^2.1.0"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.21.1"
+    "@zeit/ncc": "^0.21.1",
+    "jest": "^25.1.0"
   }
 }

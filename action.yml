@@ -2,7 +2,7 @@ name: 'Wait for github status'
 description: 'Wait for a specific github status check to complete'
 inputs:
   context:  # id of input
-    description: 'Who to greet'
+    description: 'Wait for status with context containg this string'
     required: true
     default: 'circleci'
   token:
@@ -10,7 +10,7 @@ inputs:
     required: true
 outputs:
   status: # id of output
-    description: 'Status we waited for, either success or failure'
+    description: 'Status we waited for, either success, failure, or error'
 runs:
   using: 'node12'
   main: 'dist/index.js'
