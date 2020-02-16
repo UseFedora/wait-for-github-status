@@ -8511,19 +8511,19 @@ const poll = __webpack_require__(968)
 // https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref
 const TERMINAL_STATES = ['failure', 'error', 'success']
 // Get state of the specific status we care about
-function isTerminalStatus(status) {
+function isNonTerminalStatus(status) {
   if(!status) {
     console.log("no status for this context found")
-    return false
+    return true
   }
   console.log(`${status.context} - ${status.description} - ${status.state}`)
   if(TERMINAL_STATES.includes(status.state)) {
     console.log("Complete!")
-    return true
+    return false
   }
 
   else {
-    return false
+    return true
   }
 }
 
@@ -8551,7 +8551,7 @@ async function run() {
     console.log(`Waiting for ${context} status to suceed or fail!`);
 
     const getStatusFn = () => getContextStatus({token, ref, owner, repo, context})
-    const terminalStatus = await poll(getStatusFn, isTerminalStatus, 5000)
+    const terminalStatus = await poll(getStatusFn, isNonTerminalStatus, 5000)
     console.log(JSON.stringify(terminalStatus, undefined, 2))
     core.setOutput('status', terminalStatus.state);
   } catch (error) {
