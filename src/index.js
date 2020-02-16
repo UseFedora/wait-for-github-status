@@ -6,7 +6,7 @@ async function run() {
     // `who-to-greet` input defined in action metadata file
     const context = core.getInput('context');
     const token = core.getInput('token');
-    const {payload} = github
+    const {payload} = github.context
     const ref = payload.after
     const owner = payload.repository.owner.login
     const repo = payload.repository.name
