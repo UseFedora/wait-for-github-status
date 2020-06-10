@@ -8551,7 +8551,7 @@ async function run() {
     console.log(`Waiting for ${context} status to suceed or fail!`);
 
     const getStatusFn = () => getContextStatus({token, ref, owner, repo, context})
-    const terminalStatus = await poll(getStatusFn, isNonTerminalStatus, 5000)
+    const terminalStatus = await poll(getStatusFn, isNonTerminalStatus, 20000)
     console.log(JSON.stringify(terminalStatus, undefined, 2))
     core.setOutput('status', terminalStatus.state);
   } catch (error) {
